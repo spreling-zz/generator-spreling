@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Config" pattern="file[generator-electron-angular-spreling]:node_modules//*||file:package.json" />
+</component>
