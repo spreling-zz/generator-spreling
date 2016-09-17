@@ -12,7 +12,7 @@ module.exports = {
             }
         },
         combinationDependencies: {
-            application:{
+            application: {
                 angular: {
                     "dependencies": {
                         "socket.io": "*"
@@ -49,7 +49,7 @@ module.exports = {
             "devDependencies": {}
         },
         combinationDependencies: {
-            application:{
+            application: {
                 angular: {
                     "dependencies": {
                         "socket.io": "*"

@@ -59,9 +59,57 @@ module.exports = generators.Base.extend({
          */
         storeAnswers: function() {
             _.forEach(this.answers, _.bind(function(answer, questionKey) {
-                this.log('test');
                 this.config.set(questionKey, answer);
             }, this));
+        },
+        /**
+         * @type {function}
+         * @this yo.YeomanGeneratorBase
+         */
+        initComposer: function() {
+            var dependenciesPick = _.chain()
+                .toArray()
+                .push(this.config.get('frontend'))
+                .push(this.config.get('backend'))
+                .flattenDeep()
+                .value();
+
+            this.log(dependenciesPick);
+
+
+            var defaultConfig = {
+                name: '' + this.config.get('name'),
+                version: '0.0.1',
+                description: 'no description written yet',
+                license: this.config.get('license'),
+                private: true,
+                author: {
+                    name: this.user.git.name(),
+                    email: this.user.git.email()
+                },
+                keywords: _.values(dependenciesPick)
+            };
+
+            this.fs.write('composer.json', JSON.stringify(
+                _.chain(defaultConfig)
+                    .assignIn(
+                        _.chain(npmDependencies)
+                            .pick(dependenciesPick)
+                            .mergeNpmCombinationDependencies('development', dependenciesPick)
+                            .mergeElements()
+                            .pickProperty('composerDev')
+                            .value()), null, 4));
+
+            this.fs.write('./src/package.json', JSON.stringify(
+                _.chain(defaultConfig)
+                    .chain()
+                    .extend(_(npmDependencies)
+                        .chain()
+                        .pick(dependenciesPick)
+                        .mergeNpmCombinationDependencies('application', dependenciesPick)
+                        .mergeElements()
+                        .pickProperty('npm')
+                        .value()), null, 4));
         },
         /**
          * @type {function}
@@ -88,7 +136,7 @@ module.exports = generators.Base.extend({
                 keywords: _.values(dependenciesPick)
             };
 
-            this.write('package.json', JSON.stringify(
+            this.fs.write('package.json', JSON.stringify(
                 _.chain(defaultConfig)
                     .assignIn(
                         _.chain(npmDependencies)
@@ -98,7 +146,7 @@ module.exports = generators.Base.extend({
                             .pickProperty('npmDev')
                             .value()), null, 4));
 
-            this.write('./src/package.json', JSON.stringify(
+            this.fs.write('./src/package.json', JSON.stringify(
                 _.chain(defaultConfig)
                     .chain()
                     .extend(_(npmDependencies)
@@ -109,6 +157,7 @@ module.exports = generators.Base.extend({
                         .pickProperty('npm')
                         .value()), null, 4));
         },
+
         /**
          * @type {function}
          * @this yo.YeomanGeneratorBase
@@ -137,7 +186,7 @@ module.exports = generators.Base.extend({
                 keywords: _.values(dependenciesPick)
             };
 
-            this.write('bower.json', JSON.stringify(_(defaultConfig)
+            this.fs.write('bower.json', JSON.stringify(_(defaultConfig)
                 .chain()
                 .extend(_(bowerDependencies)
                     .chain()
@@ -146,7 +195,7 @@ module.exports = generators.Base.extend({
                     .mergeElements()
                     .value()), null, 4));
 
-            this.write('.bowerrc', JSON.stringify({
+            this.fs.write('.bowerrc', JSON.stringify({
                 directory: './src/frontend/assets/bower_components'
             }, null, 4));
 

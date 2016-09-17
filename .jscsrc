@@ -6,7 +6,6 @@
     "allExcept": ["undefined"]
   },
   "disallowNewlineBeforeBlockStatements": true,
-  "disallowQuotedKeysInObjects": true,
   "disallowSpaceAfterObjectKeys": true,
   "disallowSpaceAfterPrefixUnaryOperators": true,
   "disallowSpacesInFunction": {
@@ -41,7 +40,6 @@
   },
   "requireEarlyReturn": true,
   "validateLineBreaks": "LF",
-  "validateQuoteMarks": "'",
   "maxErrors": 500
 }
 

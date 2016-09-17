@@ -56,6 +56,7 @@ module.exports = function(parent) {
                 {name: 'Internet Systems Consortium (ISC)', value: 'ISC'},
                 {name: 'No License (Copyrighted)', value: 'nolicense'}
             ],
+            default: 'nolicense',
             when: function(answers) {
                 if (answers.useConfig) {
                     return (_.isEmpty(parent.config.get('license')));
